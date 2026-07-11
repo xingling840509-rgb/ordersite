@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>團體訂餐系統</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-slate-50 min-h-screen py-10 px-4 flex items-center justify-center">
+
+    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-xl border border-slate-100">
+        
+        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl mb-8">
+            <h2 class="font-bold text-amber-800 text-base mb-1">💡 溫馨提示</h2>
+            <p class="text-sm text-amber-700 leading-relaxed">
+                為方便分配餐點，請提供以下資訊並點餐。若擔心吃不飽，可自備點心或零食。
+            </p>
+        </div>
+
+        <form id="orderForm" onsubmit="submitOrder(event)" class="space-y-6">
+            
+            <div>
+                <label for="fullName" class="block text-sm font-semibold text-slate-700 mb-2">
+                    訂餐人全名 <span class="text-red-500">*</span>
+                </label>
+                <input type="text" id="fullName" required placeholder="請輸入您的真實全名"
+                    class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-400 focus:border-amber-400 outline-none transition bg-slate-50/50">
+            </div>
+
+            <div>
+                <label for="phone" class="block text-sm font-semibold text-slate-700 mb-2">
+                    聯繫電話 <span class="text-red-500">*</span>
+                </label>
+                <input type="tel" id="phone" required placeholder="例如：0912345678" pattern="[0-9]{10}" title="請輸入正確的 10 碼數字電話"
+                    class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-400 focus:border-amber-400 outline-none transition bg-slate-50/50">
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-3">
+                    選擇餐點（可多選） <span class="text-red-500">*</span>
+                </label>
+                
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-4 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
+                        <label class="flex items-start flex-1 cursor-pointer mr-2">
+                            <input type="checkbox" name="mealCheck" value="meal1" onchange="calculateTotal()" class="mt-1 h-5 w-5 rounded text-amber-500 focus:ring-amber-400 border-slate-300 cursor-pointer">
+                            <div class="ml-3">
+                                <span class="block font-medium text-slate-800">6塊雞 ＋ 小包薯條</span>
+                                <span class="inline-block text-[11px] bg-red-50 text-red-600 font-bold px-1.5 py-0.5 rounded mt-0.5 border border-red-100">甜心卡方案</span>
+                                <span class="block text-base font-bold text-amber-600 mt-1" data-price="68">$68</span>
+                            </div>
+                        </label>
+                        <select id="qty_meal1" onchange="calculateTotal()" class="border border-slate-300 rounded-lg p-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-400">
+                            <option value="1">1 份</option><option value="2">2 份</option><option value="3">3 份</option><option value="4">4 份</option><option value="5">5 份</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
+                        <label class="flex items-start flex-1 cursor-pointer mr-2">
+                            <input type="checkbox" name="mealCheck" value="meal2" onchange="calculateTotal()" class="mt-1 h-5 w-5 rounded text-amber-500 focus:ring-amber-400 border-slate-300 cursor-pointer">
+                            <div class="ml-3">
+                                <span class="block font-medium text-slate-800">大杯玉米濃湯 ＋ 薯餅</span>
+                                <span class="inline-block text-[11px] bg-red-50 text-red-600 font-bold px-1.5 py-0.5 rounded mt-0.5 border border-red-100">甜心卡方案</span>
+                                <span class="block text-base font-bold text-amber-600 mt-1" data-price="55">$55</span>
+                            </div>
+                        </label>
+                        <select id="qty_meal2" onchange="calculateTotal()" class="border border-slate-300 rounded-lg p-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-400">
+                            <option value="1">1 份</option><option value="2">2 份</option><option value="3">3 份</option><option value="4">4 份</option><option value="5">5 份</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
+                        <label class="flex items-start flex-1 cursor-pointer mr-2">
+                            <input type="checkbox" name="mealCheck" value="meal3" onchange="calculateTotal()" class="mt-1 h-5 w-5 rounded text-amber-500 focus:ring-amber-400 border-slate-300 cursor-pointer">
+                            <div class="ml-3">
+                                <span class="block font-medium text-slate-800">麥香雞 ＋ 檸檬風味紅茶（小/冰）</span>
+                                <span class="inline-block text-[11px] bg-blue-50 text-blue-600 font-bold px-1.5 py-0.5 rounded mt-0.5 border border-blue-100">1+1方案</span>
+                                <span class="block text-base font-bold text-amber-600 mt-1" data-price="50">$50</span>
+                            </div>
+                        </label>
+                        <select id="qty_meal3" onchange="calculateTotal()" class="border border-slate-300 rounded-lg p-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-400">
+                            <option value="1">1 份</option><option value="2">2 份</option><option value="3">3 份</option><option value="4">4 份</option><option value="5">5 份</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
+                        <label class="flex items-start flex-1 cursor-pointer mr-2">
+                            <input type="checkbox" name="mealCheck" value="meal4" onchange="calculateTotal()" class="mt-1 h-5 w-5 rounded text-amber-500 focus:ring-amber-400 border-slate-300 cursor-pointer">
+                            <div class="ml-3">
+                                <span class="block font-medium text-slate-800">麥克雙牛堡 ＋ 無糖綠茶（小/冰）</span>
+                                <span class="inline-block text-[11px] bg-blue-50 text-blue-600 font-bold px-1.5 py-0.5 rounded mt-0.5 border border-blue-100">1+1方案</span>
+                                <span class="block text-base font-bold text-amber-600 mt-1" data-price="69">$69</span>
+                            </div>
+                        </label>
+                        <select id="qty_meal4" onchange="calculateTotal()" class="border border-slate-300 rounded-lg p-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-400">
+                            <option value="1">1 份</option><option value="2">2 份</option><option value="3">3 份</option><option value="4">4 份</option><option value="5">5 份</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-100 p-4 rounded-xl text-center">
+                <span id="summaryText" class="text-slate-700 font-medium">您尚未選擇 any 餐點</span>
+            </div>
+
+            <div>
+                <label for="memo" class="block text-sm font-semibold text-slate-700 mb-2">
+                    匯款對帳備註欄 <span class="text-xs font-normal text-slate-400">（選填）</span>
+                </label>
+                <input type="text" id="memo" placeholder="請填寫帳號後五碼或匯款全名以供老師核對"
+                    class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-400 focus:border-amber-400 outline-none transition bg-slate-50/50">
+            </div>
+
+            <div class="bg-rose-50 border border-rose-100 rounded-xl p-4 text-sm text-rose-800 space-y-2">
+                <div class="flex items-center gap-2 font-bold text-rose-700">
+                    <span>⚠️</span> <span>請先完成匯款，並於今晚 8 點前完成付款。</span>
+                </div>
+                <div class="flex flex-col gap-1 font-bold text-slate-700 bg-white px-3 py-2 rounded-lg border border-slate-200">
+                    <div>🏦 匯款銀行：中國信託 (822)</div>
+                    <div>🔢 匯款帳號：901567073404</div>
+                    <div>👤 匯款戶名：陳韻文</div>
+                </div>
+                <div class="flex items-center gap-2 text-rose-600">
+                    <span>⚠️</span> <span>會以實際付款者為準訂定餐點。</span>
+                </div>
+            </div>
+
+            <button type="submit" 
+                class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-4 px-4 rounded-xl shadow-lg shadow-amber-100 hover:shadow-xl hover:shadow-amber-200 transition duration-200 transform active:scale-[0.99] cursor-pointer text-center text-base">
+                確認送出訂單 🚀
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const mealNames = {
+            meal1: "6塊雞＋小包薯條",
+            meal2: "大杯玉米濃湯＋薯餅",
+            meal3: "麥香雞＋檸檬風味紅茶(小/冰)",
+            meal4: "麥克雙牛堡＋無糖綠茶(小/冰)"
+        };
+
+        function calculateTotal() {
+            const checkboxes = document.querySelectorAll('input[name="mealCheck"]:checked');
+            let totalItems = 0;
+            let totalPrice = 0;
+
+            checkboxes.forEach((cb) => {
+                const mealId = cb.value;
+                const price = parseInt(cb.parentNode.querySelector('[data-price]').getAttribute('data-price'));
+                const qty = parseInt(document.getElementById(`qty_${mealId}`).value);
+                
+                totalItems += qty;
+                totalPrice += price * qty;
+            });
+
+            const summaryText = document.getElementById('summaryText');
+            if (totalItems > 0) {
+                summaryText.innerHTML = `🛒 您已選擇 <span class="text-amber-600 font-bold">${totalItems}</span> 項餐點，總金額為：<span class="text-xl font-extrabold text-amber-600">$${totalPrice}</span> 元`;
+            } else {
+                summaryText.innerText = "您尚未選擇任何餐點";
+            }
+        }
+
+        function submitOrder(event) {
+            event.preventDefault();
+
+            const checkboxes = document.querySelectorAll('input[name="mealCheck"]:checked');
+            if (checkboxes.length === 0) {
+                alert("❌ 請至少選擇一項餐點再送出訂單喔！");
+                return;
+            }
+
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const memo = document.getElementById('memo').value || "未填寫";
+
+            let mealDetails = "";
+            let totalPrice = 0;
+            checkboxes.forEach((cb) => {
+                const mealId = cb.value;
+                const price = parseInt(cb.parentNode.querySelector('[data-price]').getAttribute('data-price'));
+                const qty = parseInt(document.getElementById(`qty_${mealId}`).value);
+                mealDetails += `• ${mealNames[mealId]} x ${qty}份\n`;
+                totalPrice += price * qty;
+            });
+
+            const alertMessage = 
+`🎉 訂餐登記成功！
+
+【您的訂餐資料】
+姓名：${fullName}
+電話：${phone}
+餐點明細：
+${mealDetails}總金額：$${totalPrice} 元
+對帳備註：${memo}
+
+----------------------------------------
+📢 匯款重要提醒：
+⏰ 請於「今晚 8 點前」完成付款！
+🏦 匯款帳號：822-901567073404
+   匯款戶名：陳韻文
+
+⚠️ 系統會以「實際付款順序」來建立最終餐點。請匯款後確保備註名字正確，方便老師核對喔！`;
+
+            alert(alertMessage);
+            
+            document.getElementById('orderForm').reset();
+            calculateTotal();
+        }
+    </script>
+</body>
+</html>
